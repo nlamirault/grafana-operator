@@ -78,6 +78,7 @@ type GrafanaDashboardSpec struct {
 	ConfigMapRef *v1.ConfigMapKeySelector `json:"configMapRef,omitempty"`
 
 	// selects Grafanas for import
+	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable"
 	InstanceSelector *metav1.LabelSelector `json:"instanceSelector"`
 
 	// folder assignment for dashboard
@@ -94,6 +95,10 @@ type GrafanaDashboardSpec struct {
 
 	// how often the dashboard is refreshed, defaults to 5m if not set
 	// +optional
+	// +kubebuilder:validation:Type=string
+	// +kubebuilder:validation:Format=duration
+	// +kubebuilder:validation:Pattern="^([0-9]+(\\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$"
+	// +kubebuilder:default="5m"
 	ResyncPeriod string `json:"resyncPeriod,omitempty"`
 
 	// maps required data sources to existing ones

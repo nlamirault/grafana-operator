@@ -16,6 +16,18 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
+    - description: GrafanaAlertRuleGroup is the Schema for the grafanaalertrulegroups
+        API
+      displayName: Grafana Alert Rule Group
+      kind: GrafanaAlertRuleGroup
+      name: grafanaalertrulegroups.grafana.integreatly.org
+      version: v1beta1
+    - description: GrafanaContactPoint is the Schema for the grafanacontactpoints
+        API
+      displayName: Grafana Contact Point
+      kind: GrafanaContactPoint
+      name: grafanacontactpoints.grafana.integreatly.org
+      version: v1beta1
     - description: GrafanaDashboard is the Schema for the grafanadashboards API
       displayName: Grafana Dashboard
       kind: GrafanaDashboard
@@ -70,4 +82,10 @@ spec:
     name: Grafana Labs
     url: https://grafana.com
   replaces: grafana-operator.v5.6.0
+  skips:
+  - grafana-operator.v5.6.1
+  - grafana-operator.v5.6.2
+  - grafana-operator.v5.6.3
+  - grafana-operator.v5.7.0
+  - grafana-operator.v5.8.0
   version: 0.0.0

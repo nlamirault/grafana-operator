@@ -7,17 +7,29 @@ linkTitle: "Helm installation"
 
 [grafana-operator](https://github.com/grafana/grafana-operator) for Kubernetes to manage Grafana instances and grafana resources.
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.6.2](https://img.shields.io/badge/AppVersion-v5.6.2-informational?style=flat-square)
+![Version: 0.1.4](https://img.shields.io/badge/Version-0.1.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.9.0](https://img.shields.io/badge/AppVersion-v5.9.0-informational?style=flat-square)
 
 ## Installation
 
 This is a OCI helm chart, helm started support OCI in version 3.8.0.
 
 ```shell
-helm upgrade -i grafana-operator oci://ghcr.io/grafana/helm-charts/grafana-operator --version v5.6.2
+helm upgrade -i grafana-operator oci://ghcr.io/grafana/helm-charts/grafana-operator --version v5.9.0
 ```
 
 Sadly helm OCI charts currently don't support searching for available versions of a helm [oci registry](https://github.com/helm/helm/issues/11000).
+
+## Upgrading
+
+Helm does not provide functionality to update custom resource definitions. This can result in the operator misbehaving when a release contains updates to the custom resource definitions.
+To avoid issues due to outdated or missing definitions, run the following command before updating an existing installation:
+
+```shell
+kubectl apply --server-side --force-conflicts -f https://github.com/grafana/grafana-operator/releases/download/v5.9.0/crds.yaml
+```
+
+The `--server-side` and `--force-conflict` flags are required to avoid running into issues with the `kubectl.kubernetes.io/last-applied-configuration` annotation.
+By using server side apply, this annotation is not considered. `--force-conflict` allows kubectl to modify fields previously managed by helm.
 
 ## Development
 
@@ -69,4 +81,5 @@ It's easier to just manage this configuration outside of the operator.
 | serviceMonitor.targetLabels | list | `[]` | Set of labels to transfer from the Kubernetes Service onto the target |
 | serviceMonitor.telemetryPath | string | `"/metrics"` | Set path to metrics path |
 | tolerations | list | `[]` | pod tolerations |
+| watchNamespaceSelector | string | `""` | Sets the WATCH_NAMESPACE_SELECTOR environment variable, it defines which namespaces the operator should be listening for based on label and key value pair added on namespace kind. By default it's all namespaces. |
 | watchNamespaces | string | `""` | Sets the WATCH_NAMESPACE environment variable, it defines which namespaces the operator should be listening for. By default it's all namespaces, if you only want to listen for the same namespace as the operator is deployed to look at namespaceScope. |

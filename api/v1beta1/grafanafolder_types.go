@@ -37,6 +37,7 @@ type GrafanaFolderSpec struct {
 	Permissions string `json:"permissions,omitempty"`
 
 	// selects Grafanas for import
+	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable"
 	InstanceSelector *metav1.LabelSelector `json:"instanceSelector"`
 
 	// allow to import this resources from an operator in a different namespace
@@ -45,6 +46,10 @@ type GrafanaFolderSpec struct {
 
 	// how often the folder is synced, defaults to 5m if not set
 	// +optional
+	// +kubebuilder:validation:Type=string
+	// +kubebuilder:validation:Format=duration
+	// +kubebuilder:validation:Pattern="^([0-9]+(\\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$"
+	// +kubebuilder:default="5m"
 	ResyncPeriod string `json:"resyncPeriod,omitempty"`
 }
 
